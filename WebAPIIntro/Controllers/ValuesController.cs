@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 
 namespace WebAPIIntro.Controllers
 {
     public class ValuesController : ApiController
     {
+
+        [HttpGet]
+        [Log]
         // GET api/values
         public IEnumerable<string> Get()
         {
@@ -35,5 +41,24 @@ namespace WebAPIIntro.Controllers
         public void Delete(int id)
         {
         }
+    }
+
+    public class LogAttribute:ActionFilterAttribute
+    {
+        public LogAttribute()
+        {
+
+        }
+
+        public override void OnActionExecuting(HttpActionContext actionContext)
+        {
+            Trace.WriteLine("Action method executing " + actionContext.ActionDescriptor.ActionName);
+        }
+
+        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        {
+            Trace.WriteLine("Action method executed " + actionExecutedContext.ActionContext.ActionDescriptor.ActionName);
+        }
+
     }
 }
